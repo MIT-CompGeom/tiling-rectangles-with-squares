@@ -252,14 +252,19 @@ def undecomposable(answers):
     """Returns a list of sizes of packings that cannot be decomposed into smaller packings via a single line cut."""
     height, width = answers.shape
     decomposable = create_board(height, width)
+    check = (7, 13)
     for i1 in range(2, height):
         for j1 in range(2, width):
-            if answers[i1][j1] == 0: continue
+            if answers[i1][j1] == 0:
+                decomposable[i1][j1] = 999999  # don't list unsolvable instances as undecomposable
+                continue
             for i2 in range(2, height):
                 if answers[i2][j1] == 0: continue
+                if i1+i2 == check[0] and j1 == check[1]: print(f'{check[0]}x{check[1]} = {i1}+{i2} x {j1}')
                 if i1+i2 < height: decomposable[i1+i2][j1] += 1
             for j2 in range(2, width):
                 if answers[i1][j2] == 0: continue
+                if i1 == check[0] and j1+j2 == check[1]: print(f'{check[0]}x{check[1]} = {i1} x {j1}+{j2}')
                 if j1+j2 < width: decomposable[i1][j1+j2] += 1
     undecomposable = []
     for i in range(2, height):
