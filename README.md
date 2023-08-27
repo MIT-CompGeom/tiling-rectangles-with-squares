@@ -115,3 +115,14 @@ restricted to sizes where the numbers of rows and columns have a common divisor
 ### 18×n
 
 ![18x19](output/18x19.svg)
+
+## Usage
+
+To run the script:
+
+1. [Install Python 3](https://www.python.org/downloads/)
+2. [Install numpy](https://numpy.org/install/) (e.g., `pip install numpy`)
+3. Run the following from the command line:
+   ```sh
+   python3 squarePackingSearch.py
+   ```
