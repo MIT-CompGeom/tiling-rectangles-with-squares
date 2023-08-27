@@ -20,7 +20,7 @@ Functions:
     - check_packing(board, allowed_pieces): Checks that the board is a perfect packing using only specified square sizes.
     - check_packings(boards, allowed_pieces): Checks a list of packings, and returns maximum square size used.
     - board_to_svg(board, cell_size=10): Renders a board as an SVG drawing (as a string).
-    - save_packings(successful_packings, output_dir): Saves all packings to SVG files in the specified directory.
+    - save_packings(successful_packings, output_dir='output'): Saves all packings to SVG files in the specified directory.
     - latex_table(answers): Prints a LaTeX table of which packings were possible (used in the paper).
     - undecomposable(answers): Returns a list of sizes of packings that cannot be decomposed into smaller packings via a single line cut.
 
@@ -88,6 +88,11 @@ def find_square(board, i, j):
     return size
 
 def pack_board(board, allowed_pieces, counter, successful_packings):
+    """Recursive function used by pack that tries to pack the board with the allowed pieces.
+
+    `counter` keeps tracks of the number of placed pieces.
+    `successful_packings` should be a list; it will accumulate all found packings.
+    """
     current_location = find_zero(board)
     if current_location is None:
         successful_packings.append(board.copy())
@@ -102,11 +107,13 @@ def pack_board(board, allowed_pieces, counter, successful_packings):
     return False
 
 def pack(board_height, board_width, allowed_pieces, successful_packings):
+    """Initializes a board and packs via pack_board."""
     board = create_board(board_height, board_width)
     counter = 0
     return pack_board(board, allowed_pieces, counter, successful_packings)
 
 def full_packing_search(max_height, max_width, allowed_pieces):
+    """Tries to pack boards of sizes from 2x2 to max_height x max_width."""
     answers = np.zeros((max_height, max_width))
     successful_packings = []
     for i in range(2, max_height):
@@ -174,6 +181,7 @@ for colors in color_palette.values():
   colors.append('#%02x%02x%02x' % tuple(int(0.5*val + 0.5*255) for val in rgb))
 
 def board_to_svg(board, cell_size=10):
+    """Renders a board as an SVG drawing (as a string)."""
     global max_color
     height, width = board.shape
     stroke_width = 2
@@ -212,6 +220,7 @@ def board_to_svg(board, cell_size=10):
     return ET.tostring(svg, encoding="unicode")
 
 def save_packings(successful_packings, output_dir='output'):
+    """Saves all packings to SVG files in the specified directory."""
     os.makedirs(output_dir, exist_ok=True)
     count = 0
     for packing in successful_packings:
@@ -225,6 +234,7 @@ def save_packings(successful_packings, output_dir='output'):
     print('Output packings:', count)
 
 def latex_table(answers):
+    """Prints a LaTeX table of which packings were possible (used in the paper)."""
     height, width = answers.shape
     print(r'\begin{tabular}{r' + 'c' * (width - 2) + '}')
     print('&'.join(['  '] + [str(j).rjust(2) for j in range(2, width)]) + r'\\')
@@ -239,6 +249,7 @@ def latex_table(answers):
     print(r'\end{tabular}')
 
 def undecomposable(answers):
+    """Returns a list of sizes of packings that cannot be decomposed into smaller packings via a single line cut."""
     height, width = answers.shape
     decomposable = create_board(height, width)
     for i1 in range(2, height):
