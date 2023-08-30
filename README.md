@@ -1,6 +1,7 @@
 # Tiling Integer Rectangles with Integer Squares
 
-Code for paper "When Can You Tile an Integer Rectangle with Integer Squares?"
+Code for paper
+"[When Can You Tile an Integer Rectangle with Integer Squares?](https://arXiv.org/abs/2308.15317)"
 by MIT CompGeom Group, Zachary Abel, Hugo A. Akitaya, Erik D. Demaine,
 Adam C. Hesterberg, and Jayson Lynch
 
